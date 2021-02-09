@@ -1,14 +1,16 @@
 package in.com.rays.jdbc;
 import java.sql.*;
+import java.util.ResourceBundle;
 public class MarksheetModel {
 
 	//	                              add query
 	
 public void add(MarksheetBeans beans) throws Exception{
-	Class.forName("com.mysql.jdbc.Driver");
-	Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/ayush","root","root");
+	ResourceBundle rs = ResourceBundle.getBundle("in.com.rays.jdbc.res");
+	Class.forName(rs.getString("driver"));
+	Connection conn = DriverManager.getConnection(rs.getString("url"),rs.getString("user"),rs.getString("pwd")	);
 	conn.setAutoCommit(false);
-	PreparedStatement ps = conn.prepareStatement("insert into employee values(?,?,?,?,?,?,?)");
+	PreparedStatement ps = conn.prepareStatement("insert into marksheet values(?,?,?,?,?,?,?)");
 	ps.setInt(1, beans.getId());
 	ps.setString(2, beans.getfName());
 	ps.setString(3, beans.getlName());
@@ -26,10 +28,11 @@ public void add(MarksheetBeans beans) throws Exception{
 	//	                              update query
 	
 	public void update(MarksheetBeans beans) throws Exception{
-		Class.forName("com.mysql.jdbc.Driver");
-		Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/ayush","root","root");
+		ResourceBundle rs = ResourceBundle.getBundle("in.com.rays.jdbc.res");
+		Class.forName(rs.getString("driver"));
+		Connection conn = DriverManager.getConnection(rs.getString("url"),rs.getString("user"),rs.getString("pwd")	);
 		conn.setAutoCommit(false);
-		PreparedStatement ps = conn.prepareStatement("update  employee set fName=?,lName=?,rollNo=?,math=?,phy=?,chem=? where id = ?");
+		PreparedStatement ps = conn.prepareStatement("update  marksheet set fName=?,lName=?,rollNo=?,math=?,phy=?,chem=? where id = ?");
 		
 		ps.setString(1, beans.getfName());
 		ps.setString(2, beans.getlName());
@@ -47,18 +50,12 @@ public void add(MarksheetBeans beans) throws Exception{
 	//	                              delete query
 	
 	public void delete(MarksheetBeans beans) throws Exception{
-		Class.forName("com.mysql.jdbc.Driver");
-		Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/ayush","root","root");
+		ResourceBundle rs = ResourceBundle.getBundle("in.com.rays.jdbc.res");
+		Class.forName(rs.getString("driver"));
+		Connection conn = DriverManager.getConnection(rs.getString("url"),rs.getString("user"),rs.getString("pwd")	);
 		conn.setAutoCommit(false);
-		PreparedStatement ps = conn.prepareStatement("delete from employee where id =?");
-		
+		PreparedStatement ps = conn.prepareStatement("delete from marksheet where id =?");
 		ps.setInt(1, beans.getId());
-		ps.setString(2, beans.getfName());
-		ps.setString(3, beans.getlName());
-		ps.setString(4, beans.getRollNo());
-		ps.setInt(5, beans.getMath());
-		ps.setInt(6, beans.getPhy());
-		ps.setInt(7, beans.getChem());
 		ps.executeUpdate();
 		conn.commit();
 		System.out.println("deleted");
@@ -69,9 +66,10 @@ public void add(MarksheetBeans beans) throws Exception{
 //                               get query
 
 public void get(MarksheetBeans beans) throws Exception{
-	Class.forName("com.mysql.jdbc.Driver");
-	Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/ayush","root","root");
-	PreparedStatement ps = conn.prepareStatement("select * from employee where rollNo=?");
+	ResourceBundle rb= ResourceBundle.getBundle("in.com.rays.jdbc.res");
+	Class.forName(rb.getString("driver"));
+	Connection conn = DriverManager.getConnection(rb.getString("url"),rb.getString("user"),rb.getString("pwd")	);
+	PreparedStatement ps = conn.prepareStatement("select * from marksheet where rollNo=?");
 	ps.setString(1, beans.getRollNo());
 	ResultSet rs = (ResultSet)ps.executeQuery();
 	while(rs.next()){
@@ -90,9 +88,10 @@ public void get(MarksheetBeans beans) throws Exception{
 	//                          search data from marksheet	
 	
 	public void search(MarksheetBeans beans) throws Exception{
-		Class.forName("com.mysql.jdbc.Driver");
-		Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/ayush","root","root");
-		PreparedStatement ps = conn.prepareStatement("select * from employee where id=?");
+		ResourceBundle r = ResourceBundle.getBundle("in.com.rays.jdbc.res");
+		Class.forName(r.getString("driver"));
+		Connection conn = DriverManager.getConnection(r.getString("url"),r.getString("user"),r.getString("pwd")	);
+		PreparedStatement ps = conn.prepareStatement("select * from marksheet where id=?");
 		ps.setInt(1, beans.getId());
 		ResultSet rs = (ResultSet)ps.executeQuery();
 		while(rs.next()){
@@ -111,8 +110,9 @@ public void get(MarksheetBeans beans) throws Exception{
 //	                           get merit list
 	
 	public void meritlist(MarksheetBeans beans) throws Exception{
-		Class.forName("com.mysql.jdbc.Driver");
-		Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/ayush","root","root");
+		ResourceBundle r = ResourceBundle.getBundle("in.com.rays.jdbc.res");
+		Class.forName(r.getString("driver"));
+		Connection conn = DriverManager.getConnection(r.getString("url"),r.getString("user"),r.getString("pwd")	);
 		PreparedStatement ps = conn.prepareStatement("select * ,(phy+chem+math) as total, (((phy+chem+math)/300)*100) as percentage from marksheet where ((phy+chem+math)/300*100) >= 50 order by percentage desc limit 0,6 ");
 		
 		ResultSet rs = (ResultSet)ps.executeQuery();
